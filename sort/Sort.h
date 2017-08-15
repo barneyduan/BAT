@@ -124,4 +124,60 @@ void MergeSortRecurrence(T arr[], int n) {
 }
 
 
+
+// Fast Sort
+template<typename T>
+void __FastSort(T arr[], int l, int mid, int r) {
+  T base = arr[l];
+  int less = l + 1;
+  int more = r;
+  int i = l + 1;
+  while (i <= more) {
+    if (arr[i] < base) {
+      swap(arr[i], arr[less++]);
+    } else if (arr[i] > base) {
+      swap(arr[i], arr[more--]);
+    }
+    i++;
+  }
+  swap(arr[l], arr[--less]);
+}
+
+template<typename T>
+void __FastSort(T arr[], int l, int r) {
+  if (l >= r) {
+    return;
+  }
+
+  int mid = l + (r - l) / 2;
+
+  T base = arr[l];
+  int less = l;
+  int more = r + 1;
+  int i = l + 1;
+  while (i < more) {
+    if (arr[i] < base) {
+      swap(arr[i], arr[++less]);
+      i ++;
+    } else if (arr[i] > base) {
+      swap(arr[i], arr[--more]);
+    } else {
+      i++;
+    }
+
+  }
+  swap(arr[l], arr[less]);
+
+  __FastSort(arr, l, less - 1);
+  __FastSort(arr, more, r);
+
+}
+
+template<typename T>
+void FastSort(T arr[], int n) {
+
+    __FastSort(arr, 0, n-1);
+}
+
+
 #endif

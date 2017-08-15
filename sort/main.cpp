@@ -33,5 +33,10 @@ int main() {
   delete[] arr5;
   delete[] arr6;
 
+  int *arr = SortTestHelper::GenerateRandomArray(n, 0, n);
+  SortTestHelper::TestSort("Fast Sort 3 roads", FastSort, arr, n);
+
+  delete[] arr;
+
   return 0;
 }
