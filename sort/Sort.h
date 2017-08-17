@@ -2,6 +2,8 @@
 #define SORT_H__
 
 #include <algorithm>
+#include "MaxHeapSort.h"
+
 
 using namespace std;
 
@@ -179,5 +181,37 @@ void FastSort(T arr[], int n) {
     __FastSort(arr, 0, n-1);
 }
 
+
+// MaxHeap Sort
+template<typename T>
+void __ShiftDown(T arr[], int i, int n) {
+  while (i * 2 + 1 < n) {
+    int max = i * 2 + 1;
+    if (max + 1 < n && arr[max + 1] > arr[max]) {
+      max ++;
+    }
+    if (arr[max] < arr[i]) {
+      break;
+    }
+    swap(arr[i], arr[max]);
+    i = max;
+  }
+}
+
+template<typename T>
+void SelfMaxHeapSort(T arr[], int n) {
+  
+  // Heapify Initialization
+  for (int i = (n - 1)/ 2; i >= 0; i --) {
+    __ShiftDown(arr, i, n);
+  }
+
+  // Self Heap Sort
+  for (int i = n - 1; i > 0; i --) {
+    swap(arr[0], arr[i]);
+    __ShiftDown(arr, 0, i);
+  }
+  
+}
 
 #endif

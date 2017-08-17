@@ -3,11 +3,12 @@
 #include "SelectSort.h"
 #include "SortTestHelper.h"
 #include "Sort.h"
+#include "MaxHeapSort.h"
 
 using namespace std;
 
 int main() {
-  int n = 50000;
+/*  int n = 50000;
   int *arr1 = SortTestHelper::GenerateRandomArray(n, 0, n);
   SortTestHelper::TestSort("Select Sort", SelectSort, arr1, n);
 
@@ -36,7 +37,37 @@ int main() {
   int *arr = SortTestHelper::GenerateRandomArray(n, 0, n);
   SortTestHelper::TestSort("Fast Sort 3 roads", FastSort, arr, n);
 
-  delete[] arr;
+  delete[] arr;*/
+
+
+
+/*  srand(time(NULL));
+  int arr[31];
+  for (int i = 0; i < 31; i ++) {
+    arr[i] = rand() % 100;
+  }
+
+  MaxHeap<int> maxheap = MaxHeap<int>(arr, 31);
+  maxheap.testPrint();*/
+
+  int n = 10;
+  int *arr1 = SortTestHelper::GenerateRandomArray(n, 0, n);
+  SortTestHelper::TestSort("SelfMaxHeapSort", SelfMaxHeapSort, arr1, n);
+  delete[] arr1;
+
+
+/*  srand(time(NULL));
+  for (int i = 0; i < 31; i ++) {
+    maxheap.Insert(rand() % 100);
+  }
+
+  maxheap.testPrint();
+
+  while ( !maxheap.IsEmpty()) {
+    cout << maxheap.ExtractMax() << " ";
+  }
+  cout << endl;*/
+
 
   return 0;
 }
