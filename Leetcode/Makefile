@@ -1,7 +1,8 @@
 test: main.o
-	g++ -g main.o -o test
-main.o: main.cpp Container_with_most_water.h
-	g++ -g -c main.cpp -o main.o
+	g++ -std=c++11 -g main.o -o test
+main.o: main.cpp Container_with_most_water.h \
+        3Sum.h
+	g++ -std=c++11 -g -c main.cpp -o main.o
 
 .PHONY:
 clean:
