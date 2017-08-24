@@ -121,6 +121,9 @@ void moveNode(ListNode **dest, ListNode **src) {
   *dest = newNode;
 }
 
+// a->b->c, when **last = &b, f->next = b, *last = d->e->f, it turns: 
+// a->d->e->f->b->c. 因为当a去搜寻b的地址时，会找到f的值。
+
 ListNode *sortedMerge(ListNode *p1, ListNode *p2) {
   if (!p1 && !p2) {
     return NULL;
@@ -132,8 +135,15 @@ ListNode *sortedMerge(ListNode *p1, ListNode *p2) {
     return p1;
   }
 
+  // **last = &dummy
+  // 当搜寻dummy的地址时，会自动定位到其他的Node， 
+  // dummy从指向NULL变为指向链表Head
+
   ListNode *dummy = NULL;
   ListNode **last = &dummy;
+  
+  // last = &(*last->next) 不再是&dummy， 无法控制dummy的内容了。
+
   for (; p1 && p2; last = &((*last)->next)) {
     if (p1->val <= p2->val) moveNode(last, &p1);
     else moveNode(last, &p2);
@@ -151,6 +161,48 @@ void sortedInsert(ListNode **head, ListNode *newnode) {
   *cur = newnode;
 }
 
+/*输入一个链表，输出该链表中倒数第k个结点。*/
+
+ListNode *findTail(ListNode *head) {
+  if (!head) {
+    return NULL;
+  }
+  ListNode *f = head;
+  while(head->next != NULL) {
+    head = head->next;
+  }
+  ListNode *r = head;
+  head = f;
+  return r;
+}
+
+ListNode *findPrevious(ListNode *head, ListNode *index) {
+  if (head == index) {
+    return NULL;
+  }
+  ListNode *pre = head;
+  while (head->next != NULL) {
+    if (head->next == index) {
+      ListNode *r = head;
+      head = pre;
+      return r;
+    }
+    head = head->next;
+  }
+  head = pre;
+  return NULL;
+}
+
+ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+  if (!pListHead) {
+    return NULL;
+  }
+  ListNode *tail = findTail(pListHead);
+  for (int i = 1; i < k; i++) {
+    tail = findPrevious(pListHead, tail);
+  }
+  return tail;
+}
 
 int main() {
   int x[] = {1, 1, 2, 2, 2, 3};
