@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <stack>
 
 struct ListNode {
   int val;
@@ -44,7 +45,7 @@ ListNode *findPrevious(ListNode *head, ListNode *index) {
   return NULL;
 }
 
-vector<int> printListFromTailToHead(ListNode *head) {
+vector<int> printListFromTailToHead2(ListNode *head) {
   ListNode *tail = findTail(head);
   if (!tail) {
     return vector<int>();
@@ -55,6 +56,34 @@ vector<int> printListFromTailToHead(ListNode *head) {
   while ((pre = findPrevious(head, tail)) != NULL) {
     res.push_back(pre->val);
     tail = pre;
+  }
+  return res;
+}
+
+/*输入一个链表，从尾到头打印链表每个节点的值。*/
+// recurrence
+vector<int> printListFromTailToHead1(ListNode *head) {
+  if (!head) {
+    return vector<int>();
+  }
+  vector<int> res = printListFromTailToHead1(head->next);
+  res.push_back(head->val);
+  return res;
+}
+
+vector<int> printListFromTailToHead(ListNode *head) {
+  if (!head) {
+    return vector<int>();
+  }
+  vector<int> res;
+  stack<int> s;
+  while (head) {
+    s.push(head->val);
+    head = head->next;
+  }
+  while (!s.empty()) {
+    res.push_back(s.top());
+    s.pop();
   }
   return res;
 }

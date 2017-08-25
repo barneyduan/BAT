@@ -141,7 +141,7 @@ ListNode *sortedMerge(ListNode *p1, ListNode *p2) {
 
   ListNode *dummy = NULL;
   ListNode **last = &dummy;
-  
+
   // last = &(*last->next) 不再是&dummy， 无法控制dummy的内容了。
 
   for (; p1 && p2; last = &((*last)->next)) {
@@ -204,8 +204,119 @@ ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
   return tail;
 }
 
+ListNode *FindKthToTail2(ListNode *pListHead, unsigned int k) {
+  if (!pListHead) {
+    return NULL;
+  }
+  ListNode *p1 = pListHead;
+  for (int i = 0; i < k - 1; i ++) {
+    if (!p1->next) {
+      return NULL;
+    }
+    p1 = p1->next;
+  }
+  ListNode *p2 = pListHead;
+  while (!p1->next) {
+    p1 = p1->next;
+    p2 = p2->next;
+  }
+  return p2;
+}
+
+void addToTail(ListNode **head, int val) {
+  ListNode *tail = new ListNode(val);
+  if (!*head) {
+    *head = tail;
+  } else {
+    ListNode *p = *head;
+    while (p->next) {
+      p = p->next;
+    }
+    p->next = tail;
+  }
+}
+
+bool IfExistLoop(ListNode *head, int &n, ListNode **node) {
+  if (!head || !head->next || !head->next->next) {
+    return false;
+  }
+  ListNode *f = head;
+  ListNode *s = head;
+  while (f->next && f->next->next) {
+    f = f->next->next;
+    s = s->next;
+    if (f == s) {
+      *node = f;
+      n = 1;
+      s = s->next;
+      while (s != f) {
+        s = s->next;
+        n++;
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
+ListNode* EntryNodeOfLoop(ListNode* pHead) {
+  int n = 0;
+  ListNode *tmp = NULL;
+  ListNode **node = &tmp;
+
+  if (!IfExistLoop(pHead, n, node)) {
+    return NULL;
+  } else {
+    ListNode *p = pHead;
+    while (p != *node) {
+      p = p->next;
+      *node = (*node)->next;
+    }
+  }
+  return *node;
+}
+
+
+/*
+  Delete node by O(1) in ListNode
+*/
+
+void DeleteNode(ListNode **head, ListNode *node) {
+  if (!head || !node) {
+    return;
+  }
+
+  // n = 1
+  if (!(*head)->next) {
+    if (*head == node) {
+      delete node;
+      node = NULL;
+      *head = NULL;
+    } else {
+      return;
+    }
+    // n >= 1
+  }else {
+    if (node->next) {
+      ListNode *delete_next = node->next;
+      node->val = delete_next->val;
+      node->next = delete_next->next;
+      delete delete_next;
+    } else {
+      ListNode *p = *head;
+      while (p->next != node) {
+        p = p->next;
+      }
+      p->next = NULL;
+      delete node;
+      node = NULL;
+    }
+  }
+}
+
+
 int main() {
-  int x[] = {1, 1, 2, 2, 2, 3};
+  int x[] = {1, 2, 3, 4, 5, 6};
   ListNode *head = new ListNode(0);
   ListNode *first = head;
   for (int i = 0; i < 6; i ++) {
@@ -213,11 +324,20 @@ int main() {
     head->next = p;
     head = p;
   }
+  //head->next = first;
+  int n = 0;
   printListNode(first);
-  
-  ListNode *mm = removeDuplicate(first);
-  printListNode(mm);
-  deleteListNode(mm);
+  DeleteNode(&first, first->next->next);
+  //addToTail(&first, 4);
+  printListNode(first);
+  //cout << IfExistLoop(first, n);
+  //cout << endl << n << endl;
+  deleteListNode(first);
+
+  ListNode *test = NULL;
+  addToTail(&test, 1);
+  printListNode(test);
+
 
   // test 2
   int y[] = {4};
@@ -246,4 +366,29 @@ int main() {
 
   return 0;
 
+}
+
+
+
+/*输入一个复杂链表（每个节点中有节点值，以及两个指针，
+一个指向下一个节点，另一个特殊指针指向任意一个节点），
+返回结果为复制后复杂链表的head。
+（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）*/
+
+/*
+ Solution: 
+*/
+
+
+struct RandomListNode {
+    int label;
+    struct RandomListNode *next, *random;
+    RandomListNode(int x) :
+            label(x), next(NULL), random(NULL) {
+    }
+};
+
+RandomListNode* Clone(RandomListNode* pHead) {
+
+        
 }

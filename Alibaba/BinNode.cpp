@@ -125,6 +125,9 @@ bool HasSubTree(TreeNode *father, TreeNode *son) {
 
 }
 
+/*请实现一个函数，用来判断一颗二叉树是不是对称的。
+注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。*/
+
 void Mirror(TreeNode *root) {
   if (!root || (!root->left && !root->right)) {
     return;
@@ -134,6 +137,28 @@ void Mirror(TreeNode *root) {
   root->right = temp;
   Mirror(root->left);
   Mirror(root->right);
+}
+
+bool isEqual(TreeNode *p1, TreeNode *p2) {
+  if (!p1 && !p2) {
+    return true;
+  }
+  if (!p1 || !p2) {
+    return false;
+  }
+  if (p1->val = p2->val) {
+    return (isEqual(p1->left, p2->right) && 
+        isEqual(p1->right, p2->left))
+  }
+}
+
+bool isSymmetrical(TreeNode* pRoot)
+{
+  if (!pRoot) {
+    return false;
+  }
+  return isEqual(pRoot->left, pRoot->right);
+    
 }
 
 
